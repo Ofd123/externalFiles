@@ -1,6 +1,7 @@
 package com.example.externalfiles;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,6 +38,9 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity
 {
+    /**
+     * this is the main activity
+     */
     private final String FILENAME = "exttest.txt";
     private static final int REQUEST_CODE_PERMISSION = 1;
 
@@ -69,6 +73,10 @@ public class MainActivity extends AppCompatActivity
         loadFromFile();
     }
 
+    /**
+     * this method appends the text to the file
+     * @param text
+     */
     private void appendToFile(String text)
     {
         try (FileWriter writer = new FileWriter(file, true))
@@ -83,6 +91,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * this method loads the text from the file
+     */
     private void loadFromFile()
     {
         StringBuilder content = new StringBuilder();
@@ -103,7 +114,9 @@ public class MainActivity extends AppCompatActivity
         }
         showingText.setText(content.toString());
     }
-
+    /**
+     * this method clears the file
+     */
     private void clearFile()
     {
         try (FileWriter writer = new FileWriter(file, false))
@@ -117,32 +130,27 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "Error clearing file", Toast.LENGTH_SHORT).show();
         }
     }
-
+    /**
+     * this method checks if the external storage is available
+     * @return
+     */
     public boolean isExternalStorageAvailable()
     {
     String state = Environment.getExternalStorageState();
     return Environment.MEDIA_MOUNTED.equals(state);
     }
-
+    /*
+     * this method checks if the external storage is writable
+     * @return
+     */
     private void requestPermission()
     {
     ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSION);
     }
-
-
-
-    public void reset(View view)
-    {
-        clearFile();
-        loadFromFile();
-    }
-
-    public void exit(View view)
-    {
-        save(view);
-        finish();
-    }
-
+    /**
+     * this method saves the text in the file
+     * @param view
+     */
     public void save(View view)
     {
         appendToFile(input.getText().toString());
@@ -150,18 +158,31 @@ public class MainActivity extends AppCompatActivity
         input.setText("");
     }
 
+    /**
+     * this method resets the text in the file
+     * @return
+     */
+    public void reset(View view)
+    {
+        clearFile();
+        loadFromFile();
+    }
+    /**
+     * this method saves the text and exits the app
+     * @param view
+     */
+    public void exit(View view)
+    {
+        save(view);
+        finish();
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * this method checks if the permission is granted
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
     {
@@ -179,9 +200,13 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-
+    /**
+     * this method opens the credits activity
+     * @param view
+     */
     public void credits(View view)
     {
-        
+        Intent intent = new Intent(this, credits.class);
+        startActivity(intent);
     }
 }
